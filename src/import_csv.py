@@ -88,6 +88,7 @@ def ingest_edges(relation, meta, source, target, edges, limit=10000):
 						}]->(m)
 
 					'''%(source, target, relation, meta)
+					print(query)
 					tx.run(query, {"batch": batch})
 					skip += limit
 					tx.commit()
@@ -112,8 +113,7 @@ for directory in directories:
     for filename in glob(directory + "/*.nodes.csv"):
         match = re.match(node_pattern, filename).groupdict()
         entity = match["entity"]
-        label = match["label"].replace("_", " ")
-        print(label)
+        label = match["label"]
         n = label
         if len(label.split(" ")) > 1:
           n = "`%s`"%label
