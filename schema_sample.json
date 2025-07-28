@@ -141,7 +141,7 @@
         "tabs": [
             {
                 "endpoint": "/",
-                "label": "Term & Gene Search",
+                "label": "Kinase & Phosphosite Search",
                 "type": "page",
                 "component": "KnowledgeGraph",
                 "props": {
@@ -170,8 +170,8 @@
                     "component": "logo",
                     "props": {
                         "src": "https://minio.dev.maayanlab.cloud/enrichr-kg/enrichr-kg.png",
-                        "alt": "enrichr-kg",
-                        "title": "Enrichr-KG",
+                        "alt": "kea-kg",
+                        "title": "KEA-KG",
                         "color": "inherit",
                         "size": "small"
                     }
