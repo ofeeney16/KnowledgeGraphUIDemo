@@ -112,7 +112,7 @@ for directory in directories:
     for filename in glob(directory + "/*.nodes.csv"):
         match = re.match(node_pattern, filename).groupdict()
         entity = match["entity"]
-        label = match["label"].replace("_", " ")
+        label = match["label"]
         print(label)
         n = label
         if len(label.split(" ")) > 1:
