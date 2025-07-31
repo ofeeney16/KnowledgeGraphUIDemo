@@ -8,57 +8,71 @@
             ],
             "display": [
                 {
-                    "label": "kinase ID",
-                    "text": "${id}",
+                    "label": "Kinase",
+                    "text": "${label}",
                     "type": "text"
                 },
                 {
-                    "label": "label",
+                    "label": "Harmonizome",
+                    "href": "https://maayanlab.cloud/Harmonizome/gene/${label}",
                     "text": "${label}",
-                    "type": "text"
+                    "type": "link"
+                },
+                {
+                    "label": "ARCHS4",
+                    "href": "https://maayanlab.cloud/archs4/gene/${label}",
+                    "text": "${label}",
+                    "type": "link"
+                },
+                {
+                    "label": "GDLPA",
+                    "href": "https://cfde-gene-pages.cloud/gene/${label}?CF=false&PS=true",
+                    "text": "${label}",
+                    "type": "link"
+                },
+                {
+                    "label": "NCBI Gene",
+                    "href": "https://www.ncbi.nlm.nih.gov/gene/${id.replace('NCBI:', '')}",
+                    "text": "${id}",
+                    "type": "link"
                 }
             ],
             "relation": [],
             "search": [
-                "id",
                 "label"
-            ]
+            ],
+            "color": "#80D8FF"
         },
         {
-            "node": "kinase phosphosite",
+            "node": "kinase_phosphosite",
             "example": [
-                "AAK1_S509",
-                "AAK1_T1389"
+                "AAK1_T23",
+                "AKT2_S888"
             ],
             "display": [
                 {
-                    "label": "kinase phosphosite ID",
-                    "text": "${id}",
-                    "type": "text"
-                },
-                {
-                    "label": "label",
+                    "label": "Kinase Phosphosite",
                     "text": "${label}",
                     "type": "text"
                 }
             ],
             "relation": [],
             "search": [
-                "id",
                 "label"
-            ]
+            ],
+            "color": "#00caff"
         }
     ],
     "edges": [
         {
             "match": [
-                "phosphosite"
+                "phosphorylates"
             ],
-            "selected": true,
+            "directed": "triangle",
             "display": [
                 {
-                    "label": "source",
-                    "text": "${source}",
+                    "label": "source label",
+                    "text": "${source_label}",
                     "type": "text"
                 },
                 {
@@ -67,31 +81,32 @@
                     "type": "text"
                 },
                 {
-                    "label": "target",
-                    "text": "${target}",
-                    "type": "text"
-                },
-                {
-                    "label": "source label",
-                    "text": "${source_label}",
-                    "type": "text"
-                },
-                {
                     "label": "target label",
                     "text": "${target_label}",
+                    "type": "text"
+                },
+                {
+                    "label": "z score",
+                    "text": "${z_score}",
+                    "type": "text"
+                },
+                {
+                    "label": "p value",
+                    "text": "${p_value}",
                     "type": "text"
                 }
             ]
         },
         {
             "match": [
-                "phosphorylates"
+                "phosphosite"
             ],
-            "selected": true,
+            "color": "#c70a2d",
+            "directed": "tee",
             "display": [
                 {
-                    "label": "source",
-                    "text": "${source}",
+                    "label": "source label",
+                    "text": "${source_label}",
                     "type": "text"
                 },
                 {
@@ -100,23 +115,18 @@
                     "type": "text"
                 },
                 {
-                    "label": "target",
-                    "text": "${target}",
-                    "type": "text"
-                },
-                {
-                    "label": "source label",
-                    "text": "${source_label}",
-                    "type": "text"
-                },
-                {
                     "label": "target label",
                     "text": "${target_label}",
                     "type": "text"
                 },
                 {
-                    "label": "percentile",
-                    "text": "${percentile}",
+                    "label": "z score",
+                    "text": "${z_score}",
+                    "type": "text"
+                },
+                {
+                    "label": "p value",
+                    "text": "${p_value}",
                     "type": "text"
                 }
             ]
@@ -150,12 +160,12 @@
                 "component": "KnowledgeGraph",
                 "props": {
                     "init_function": "initialize_kg",
-                    "title": "Kinase-Kinase Regulatory Subnetworks",
-                    "description": "Search for subnetworks within the KEA3 GRN by entering one or two kinases. The background GRN contains 42,322 signed and directed kinase-kinase regulatory relationships between 20,659 source and target human kinases and phosphosites.",
+                    "title": "Kinase Regulatory Networks",
+                    "description": "",
                     "initial_query": {
-                        "start": "Kinase",
-                        "start_term": "CDC7",
-                        "start_field": "source_label"
+                        "start": "kinase",
+                        "start_term": "MAPK1",
+                        "start_field": "label"
                     },
                     "subheader": {
                         "url_field": "filter",
@@ -164,21 +174,32 @@
                 }
             },
             {
-                "endpoint": "/enrichment",
-                "label": "Enrichment",
-                "type": "page",
-                "component": "KEA3Enrichment",
+                "endpoint":"/enrichment",
+                "label":"Enrichment",
+                "type":"page",
+                "component":"Enrichment",
                 "props": {
                     "init_function": "initialize_enrichment",
                     "title": "Kinase Enrichment Analysis with KEA3",
-                    "description": "Enter a set of Entrez gene below to perform enrichment analysis using [KEA3](https://maayanlab.cloud/kea3/).",
-                    "placeholder": "Enter newline separated gene sets",
+                    "description": "Enter a set of Entrez phosphorylated proteins below to perform enrichment analysis using [KEA3](https://maayanlab.cloud/kea3/).",
+                    "placeholder": "Enter newline separated protein sets",
                     "disableHeader": true,
                     "disableLibraryLimit": true,
+                    "example": {
+                        "gene_set": "ZNF264\nTMPO\nISL2\nMAP3K8\nEFNB1\nEIF3C\nOSBPL11\nABCF1\nUTRN\nOPRK1\nTSC1\nGAB2\nRPS3P2\nDDX3X\nPPP1CA\nNF2\nRBM3\nIRAK1\nKCNH2\nNPR1\nMOCOS\nITSN2\nMITF\nARAF\nDAPK2\nEPHB2\nCACNA1G\nYWHAZ\nGMFB",
+                        "description": "Sample",
+                        "libraries": [
+                            {
+                                "name": "Integrated--meanRank",
+                                "limit": 10
+                            }
+                        ],
+                        "gene_degree": 3
+                    },
                     "libraries": [
                         {
                             "name": "Integrated--meanRank",
-                            "node": "Kinase"
+                            "node": "kinase"
                         }
                     ],
                     "sortLibraries": false,
